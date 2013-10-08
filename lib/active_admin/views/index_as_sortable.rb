@@ -88,6 +88,28 @@ module ActiveAdmin
 
       def build_default_actions(resource)
         links = ''.html_safe
+        #To implement "add subcategory" in the index view,
+        #
+        #STEP 1
+          #Create the below method in the resource file
+          #ActiveAdmin.register ResourceModel do
+          #         ...
+          #  member_action :new_child do
+          #    //Code to display Add New [Child Resource] form
+          #  end
+          #         ...
+          #end
+          #where params[:id] is the parent object id
+          #Create the corresponding form in app/views/admin/...
+        #
+        #STEP 2
+          #add to locales
+          # add_subcategory: "Add Subcategory Text or html entity"
+
+        if controller.action_methods.include?('new_child')
+          new_child_path="/"+ActiveAdmin.application.default_namespace.to_s+"/"+@resource_name.pluralize+"/"+resource.id.to_s+"/new_child"
+          links << link_to(I18n.t('add_subcategory'),new_child_path , :class => "member_link view_link")
+        end
         if controller.action_methods.include?('show')
           links << link_to(I18n.t('active_admin.view'), resource_path(resource), :class => "member_link view_link")
         end
